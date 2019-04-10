@@ -1,0 +1,29 @@
+{% extends 'bootstrap/base.html' %}
+{% block title %}Train times{% endblock title %}
+
+{% block navbar %}
+<div class="container-fluid">
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">Train Times</a>
+            </div>
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="#">Departures</a></li>
+                <li><a href="#">Arrivals</a></li>
+            </ul>
+            <div class="pull-right">
+                <form class="form-inline" action="javascript:search()"> <!-- change to an event handler -->
+                    <label>
+                        <input class="form-control" type="text" id="search_data">
+                    </label>
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+</div>
+{%- endblock %}
+
+{% block content %}
+{% endblock %}
