@@ -1,5 +1,4 @@
 # Sign up to use TransportAPI here https://developer.transportapi.com/
 [auth]
-app_id =
-app_key =
-
+app_id = ''
+app_key = ''
