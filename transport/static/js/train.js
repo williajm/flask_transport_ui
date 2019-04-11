@@ -14,14 +14,14 @@ function search() {
 socket.on( 'train_result', function( trains ) {
     var trainTable = document.getElementById("train_table")
     trainTable.innerHTML = ''
-    var live = JSON.parse(trains);
+    var depart = JSON.parse(trains);
 
-    var stationName = document.getElementById("station_name")
-    stationName.innerText = ''
-    var stationText = document.createTextNode(live.station_name)
-    stationName.appendChild(stationText)
+    //var stationName = document.getElementById("station_name")
+    //stationName.innerText = ''
+    //var stationText = document.createTextNode(live.station_name)
+    //stationName.appendChild(stationText)
 
-    var depart = live.departures.all
+    //var depart = live.departures.all
     var trainCount = depart.length
     for (var i = 0; i < trainCount; i++) {
         var row = document.createElement("tr")
