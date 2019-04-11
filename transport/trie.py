@@ -3,6 +3,7 @@ trie.py provides trie search tree (AKA a prefix tree).
 """
 from __future__ import annotations
 from dataclasses import dataclass, field
+from functools import lru_cache
 from typing import Dict, List, Any
 
 
@@ -29,6 +30,7 @@ class Trie:
             current = current.children[char]
         current.value = value
 
+    @lru_cache(maxsize=1024)
     def search(self, key_prefix: str) -> List:
         """
         Search the Trie for all nodes with a common prefix.
