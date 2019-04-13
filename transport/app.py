@@ -1,10 +1,8 @@
+import os
 from flask import Flask, render_template, request
 from flask_bootstrap import Bootstrap
 from flask_socketio import SocketIO, emit
 from transport.query import get_train_live
-
-from importlib import resources
-import json
 import logging
 import logging.config
 
@@ -14,15 +12,6 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
 bootstrap = Bootstrap(app)
 socket_io = SocketIO(app)
-
-
-def configure_logging():
-    """
-    blah
-    :return:
-    """
-    with resources.open_text('config', 'logging.json') as log_config:
-        logging.config.dictConfig(json.load(log_config))
 
 
 @app.route('/')
@@ -54,5 +43,6 @@ def default_error_handler(e):
 
 
 if __name__ == '__main__':
-    configure_logging()
+    logging.basicConfig(format='%(asctime)s %(module)s %(levelname)s: %(message)s',
+                        level=os.getenv('ftu_log_level', 'DEBUG'))
     socket_io.run(app)
