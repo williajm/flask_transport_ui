@@ -6,7 +6,7 @@ trie = Trie()
 
 
 def setup_module():
-    with resources.open_text('config', 'station_codes.csv') as stations:
+    with resources.open_text('transport', 'station_codes.csv') as stations:
         rows = csv.reader(stations)
         next(rows)
         for row in rows:

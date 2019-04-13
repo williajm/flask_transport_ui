@@ -1,4 +1,4 @@
 all: lint
 
 lint:
-	pylint --disable=W1203,C0103,E1101 transport/ config/ tests/*.py
+	pylint --disable=W1203,C0103,E1101 transport/ tests/*.py

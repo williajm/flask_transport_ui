@@ -4,13 +4,13 @@ blah
 from dataclasses import dataclass
 import json
 import logging
+import os
 from typing import List
 import requests
-from config import config
 
 log = logging.getLogger(__name__)
 session = requests.session()
-session.params = config.get('auth')
+session.params = {'app_id': os.getenv('ftu_app_id'), 'app_key': os.getenv('ftu_app_key')}
 
 
 @dataclass()
