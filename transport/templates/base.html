@@ -1,7 +1,14 @@
 {% extends 'bootstrap/base.html' %}
+
 {% block title %}Train times{% endblock title %}
 
 {% block navbar %}
+<script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
+<script src="{{url_for('static',filename='js/train.js')}}"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+<script src="//code.jquery.com/jquery-1.12.4.js"></script>
+<script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
 <div class="container-fluid">
     <nav class="navbar navbar-inverse">
         <div class="container-fluid">
@@ -23,7 +30,17 @@
         </div>
     </nav>
 </div>
+<script>
+$( "#search_data" ).autocomplete({
+        source:function(request, response) {
+            $.getJSON("{{url_for('autocomplete')}}",{
+                q: request.term,
+            }, function(data) {
+                response(data.matching_results);
+            });
+        }
+});
+</script>
 {%- endblock %}
-
 {% block content %}
 {% endblock %}
