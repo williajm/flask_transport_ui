@@ -2,8 +2,23 @@ dist: xenial
 language: python
 python:
   - "3.7"
-install:
-  - pip install -r requirements/prod.txt
-  - pip install -r requirements/dev.txt
-script:
-  - python -m pytest -vv --durations=0 --cov=transport/
+services:
+  - docker
+jobs:
+  include:
+
+    - stage: Unit Testing
+      install:
+        - pip install -r requirements/prod.txt
+        - pip install -r requirements/dev.txt
+      script:
+        - python -m pytest -vv --cov=transport/ tests/unit
+
+    - stage: Integration Testing
+      install:
+        - docker build . -t ftu
+        - docker run -d -p 5000:5000 ftu
+        - pip install -r requirements/prod.txt
+        - pip install -r requirements/dev.txt
+      script:
+        - python -m pytest tests/integration
