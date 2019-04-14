@@ -8,7 +8,7 @@ from transport.app import create_trie, Station
 @pytest.fixture(scope='module')
 def trie():
     """
-    Create a trie from the CSV list of stations for use in the unit tests/
+    Create a trie from the CSV list of stations for use in the unit tests.
     """
     trie = create_trie()
     return trie
