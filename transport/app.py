@@ -25,7 +25,7 @@ def get_train_times():
     """
     Render the initial page
     """
-    log.info(f'request={request}')
+    log.debug(f'request={request}')
     return render_template('train_times.html')
 
 
@@ -34,12 +34,12 @@ def autocomplete():
     """
     Searches the trie for autocomplete suggestions.
     """
-    log.info(f'request={request}')
+    log.debug(f'request={request}')
     query = request.args.get('q')
     suggestions = []
     for station in trie.search(query):
         suggestions.append(station.name)
-    log.info(f'autocomplete results={suggestions}')
+    log.debug(f'autocomplete results={suggestions}')
     return jsonify(matching_results=suggestions)
 
 
@@ -48,7 +48,7 @@ def train_connect():
     """
     Called when a websocket client connects.
     """
-    log.info('train_connect() called')
+    log.debug('train_connect() called')
 
 
 @socket_io.on('disconnect', namespace='/train')
@@ -56,7 +56,7 @@ def train_disconnect():
     """
     Called when a websocket client disconnects.
     """
-    log.info(f'train_disconnect() called')
+    log.debug(f'train_disconnect() called')
 
 
 @socket_io.on('search_event', namespace='/train')
@@ -64,9 +64,9 @@ def train_search(message):
     """
     Returns the live departure times for a particular station.
     """
-    log.info(f'received message: {message}')
+    log.debug(f'received message: {message}')
     search_result = trie.search(message.get('station'))
-    log.info(f'search_result={search_result}')
+    log.debug(f'search_result={search_result}')
     if search_result:
         trains = get_train_live(search_result[0].code)
         emit('train_result', trains, json=True)
@@ -101,11 +101,13 @@ def create_trie() -> Trie:
         for row in rows:
             station = Station(name=row[0], code=row[1])
             trie.insert(key=station.name, value=station)
+    log.debug('trie built')
     return trie
 
 
 if __name__ == '__main__':
     logging.basicConfig(format='%(asctime)s %(module)s %(levelname)s: %(message)s',
                         level=os.getenv('ftu_log_level', 'DEBUG'))
+    log.info('Starting transport UI')
     trie = create_trie()
-    socket_io.run(app)
+    socket_io.run(app, host='0.0.0.0')
