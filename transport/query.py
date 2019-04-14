@@ -48,13 +48,13 @@ def get_train_live(station: str) -> str:
     if resp.status_code != requests.codes.ok:
         log.warning(f'http status={resp.status_code} for {url}')
         return ''
-    sanitised_obj = _sanitise(resp.text)
-    sanitised_json = json.dumps(sanitised_obj, indent=4, cls=TrainEncoder)
-    log.debug(f'sanitised_json={sanitised_json}')
-    return sanitised_json
+    trimmed_obj = _trim(resp.text)
+    trimmed_json = json.dumps(trimmed_obj, indent=4, cls=TrainEncoder)
+    log.debug(f'trimmed_json={trimmed_json}')
+    return trimmed_json
 
 
-def _sanitise(query_result: str) -> List[Train]:
+def _trim(query_result: str) -> List[Train]:
     query_json = json.loads(query_result)
     departures = query_json.get('departures', {}).get('all', [])
     trains = []
