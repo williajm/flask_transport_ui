@@ -6,6 +6,7 @@ import json
 import logging
 import os
 from typing import List
+from cachetools import cached, TTLCache
 import requests
 
 log = logging.getLogger(__name__)
@@ -36,6 +37,7 @@ class TrainEncoder(json.JSONEncoder):
         return o.__dict__
 
 
+@cached(cache=TTLCache(maxsize=1024, ttl=300))
 def get_train_live(station: str) -> str:
     """
     Query transport API for the live departure times.

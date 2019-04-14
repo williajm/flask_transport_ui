@@ -23,8 +23,8 @@
                 <form class="form-inline" action="javascript:search()"> <!-- change to an event handler -->
                     <label>
                         <input class="form-control" type="text" id="search_data">
+                        <input type="submit" value="search">
                     </label>
-                    <button class="btn btn-outline-success" type="submit">Search</button>
                 </form>
             </div>
         </div>
@@ -38,6 +38,10 @@ $( "#search_data" ).autocomplete({
             }, function(data) {
                 response(data.matching_results);
             });
+
+        },
+        select: function() {
+        $(this).closest('form').trigger('submit');
         }
 });
 </script>

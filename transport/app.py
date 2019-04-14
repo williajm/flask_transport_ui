@@ -70,6 +70,7 @@ def train_search(message):
     if search_result:
         trains = get_train_live(search_result[0].code)
         emit('train_result', trains, json=True)
+        emit('station_name', {'station_name': message.get('station')})
 
 
 @socket_io.on_error_default
