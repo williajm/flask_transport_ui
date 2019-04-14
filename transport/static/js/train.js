@@ -6,22 +6,27 @@ var socket = io.connect('http://' + document.domain + ':' + location.port + name
 
 // send a search request
 function search() {
+    console.log('sending search request')
     socket.emit('search_event', {station: $('#search_data').val()});
     return false;
 }
 
+// set station name
+socket.on( 'station_name', function ( name ) {
+    console.log('setting station name')
+    var stationName = document.getElementById("station_name")
+    stationName.innerText = ''
+    var stationText = document.createTextNode(name.station_name)
+    stationName.appendChild(stationText)
+});
+
 // receive a search result
 socket.on( 'train_result', function( trains ) {
+    console.log('received a search result')
     var trainTable = document.getElementById("train_table")
     trainTable.innerHTML = ''
     var depart = JSON.parse(trains);
 
-    //var stationName = document.getElementById("station_name")
-    //stationName.innerText = ''
-    //var stationText = document.createTextNode(live.station_name)
-    //stationName.appendChild(stationText)
-
-    //var depart = live.departures.all
     var trainCount = depart.length
     for (var i = 0; i < trainCount; i++) {
         var row = document.createElement("tr")
