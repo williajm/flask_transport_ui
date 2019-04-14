@@ -1,5 +1,5 @@
 """
-blah
+Interfaces with the transport api search methods.
 """
 from dataclasses import dataclass
 import json
@@ -15,6 +15,9 @@ session.params = {'app_id': os.getenv('ftu_app_id'), 'app_key': os.getenv('ftu_a
 
 @dataclass()
 class Train:
+    """
+    Encapsulates the information that we want to display.
+    """
     aimed_departure_time: str
     expected_departure_time: str
     destination_name: str
@@ -25,14 +28,17 @@ class Train:
 
 
 class TrainEncoder(json.JSONEncoder):
+    """
+    Makes Train objects JSON encodable.
+    """
 
-    def default(self, obj):
-        return obj.__dict__
+    def default(self, o):
+        return o.__dict__
 
 
 def get_train_live(station: str) -> str:
     """
-    blah
+    Query transport API for the live departure times.
     :param station:
     :return:
     """
@@ -41,7 +47,7 @@ def get_train_live(station: str) -> str:
     resp = session.get(url)
     if resp.status_code != requests.codes.ok:
         log.warning(f'http status={resp.status_code} for {url}')
-        return '' # TODO throw an exception
+        return ''
     sanitised_obj = _sanitise(resp.text)
     sanitised_json = json.dumps(sanitised_obj, indent=4, cls=TrainEncoder)
     log.debug(f'sanitised_json={sanitised_json}')
