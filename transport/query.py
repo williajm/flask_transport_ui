@@ -2,6 +2,7 @@
 Interfaces with the transport api search methods.
 """
 from dataclasses import dataclass
+from datetime import datetime, timedelta
 import json
 import logging
 import os
@@ -70,3 +71,25 @@ def _trim(query_result: str) -> List[Train]:
                       status=departure.get('status'))
         trains.append(train)
     return trains
+
+
+def get_train_fake(station: str) -> str:
+    """
+    Generates fake train data
+    :param station:
+    :return:
+    """
+    t = datetime.fromtimestamp(0)
+    delta = timedelta(hours=1)
+    trains = []
+    for i in range(12):
+        train = Train(aimed_departure_time=t.strftime('%H:%M'),
+                      expected_departure_time=t.strftime('%H:%M'),
+                      destination_name=f'{station} destination {i}',
+                      platform=str(i),
+                      operator_name=f'{station} operator',
+                      origin_name=f'{station} origin {i}',
+                      status=f'{"CANCELLED" if i % 3 == 0 else "ON TIME"}')
+        trains.append(train)
+        t += delta
+    return json.dumps(trains, indent=4, cls=TrainEncoder)

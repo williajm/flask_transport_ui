@@ -111,4 +111,6 @@ if __name__ == '__main__':
                         level=os.getenv('ftu_log_level', 'DEBUG'))
     log.info('Starting transport UI')
     trie = create_trie()
+    if os.getenv('ftu_fake_it', False):
+        from transport.query import get_train_fake as get_train_live
     socket_io.run(app, host='0.0.0.0')

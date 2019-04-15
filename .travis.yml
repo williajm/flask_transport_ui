@@ -17,7 +17,7 @@ jobs:
     - stage: Integration Testing
       install:
         - docker build . -t ftu
-        - docker run -d -p 5000:5000 ftu
+        - docker run -d -p 5000:5000 --env ftu_fake_it="true" ftu
         - pip install -r requirements/prod.txt
         - pip install -r requirements/dev.txt
       script:
