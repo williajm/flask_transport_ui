@@ -4,12 +4,17 @@ namespace = '/train';
 // connect to the socket io server
 var socket = io.connect('http://' + document.domain + ':' + location.port + namespace);
 
+document.addEventListener("DOMContentLoaded", function(event) {
+    document.getElementById('search_form').addEventListener("submit", searchTrains)
+});
+
 // send a search request
-function search() {
-    console.log('sending search request')
+function searchTrains(event) {
+    event.preventDefault();
+    console.log('sending search request');
     socket.emit('search_event', {station: $('#search_data').val()});
-    return false;
 }
+
 
 // set station name
 socket.on( 'station_name', function ( name ) {

@@ -20,7 +20,7 @@
                 <li><a href="#">Arrivals</a></li>
             </ul>
             <div class="pull-right">
-                <form class="form-inline" action="javascript:search()"> <!-- change to an event handler -->
+                <form class="form-inline" id="search_form">
                     <label>
                         <input class="form-control" type="text" id="search_data">
                         <input type="submit" value="search">
@@ -40,8 +40,13 @@ $( "#search_data" ).autocomplete({
             });
 
         },
-        select: function() {
-        $(this).closest('form').trigger('submit');
+       select: function(e, ui) {
+            console.log("autocomplete selection", ui.item);
+            document.getElementById('search_data').value = ui.item.value
+            <!-- trigger event does not invoke the event listener so use dispatch event -->
+            var evt = document.createEvent("Event");
+            evt.initEvent("submit", true, true);
+            document.getElementById('search_form').dispatchEvent(evt);
         }
 });
 </script>
