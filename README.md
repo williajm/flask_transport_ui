@@ -1,6 +1,6 @@
 # Flask Transport UI
 
-This is a Flask learning project.   
+This is a Flask learning project with a focus on testing.   
 The Flask application displays live train schedule information for UK train stations.  
 Autocomplete of the station name is via an AJAX call back to Flask.  
 Population of the live schedule information is via a websocket.    

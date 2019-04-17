@@ -42,7 +42,7 @@ $( "#search_data" ).autocomplete({
         },
        select: function(e, ui) {
             console.log("autocomplete selection", ui.item);
-            document.getElementById('search_data').value = ui.item.value
+            document.getElementById('search_data').value = ui.item.value;
             <!-- trigger event does not invoke the event listener so use dispatch event -->
             var evt = document.createEvent("Event");
             evt.initEvent("submit", true, true);
