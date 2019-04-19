@@ -1,6 +1,8 @@
 """
 Requires the application to be running.
 """
+import json
+import re
 import pytest
 import socketio
 
@@ -46,3 +48,25 @@ def sio():
 
 def test_connect(sio):
     assert CustomNamespace.connected
+
+
+def test_disconnect(sio):
+    sio.disconnect()
+    assert not CustomNamespace.connected
+
+
+def test_search(sio):
+    sio.emit('search_event', {'station': 'Southampton Central'}, namespace='/train')
+    sio.sleep(1)
+    assert len(CustomNamespace.train_result) == 1
+    result = json.loads(CustomNamespace.train_result[0])
+    assert len(result) == 12
+    for departure in result:
+        assert len(departure.keys()) == 7
+        assert re.match(pattern='^[0-2][0-9]:[0:5][0:9]$', string=departure.get('aimed_departure_time'))
+        assert re.match(pattern='^[0-2][0-9]:[0:5][0:9]$', string=departure.get('expected_departure_time'))
+        assert departure.get('destination_name').startswith('SOU destination')
+        assert re.match(pattern='^[0-1]?[0-9]$', string=departure.get('platform'))
+        assert departure.get('operator_name') == 'SOU operator'
+        assert departure.get('origin_name').startswith('SOU origin')
+        assert re.match(pattern='^(ON TIME|CANCELLED)$', string=departure.get('status'))
