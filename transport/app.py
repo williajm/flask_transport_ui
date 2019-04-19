@@ -69,7 +69,9 @@ def train_search(message):
     log.debug(f'search_result={search_result}')
     if search_result:
         trains = get_train_live(search_result[0].code)
+        log.debug(f'emit: train_result {trains}')
         emit('train_result', trains, json=True)
+        log.debug(f'emit: station_name {message.get("station")}')
         emit('station_name', {'station_name': message.get('station')})
 
 
