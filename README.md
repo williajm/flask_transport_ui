@@ -28,3 +28,14 @@ docker run -p 5000:5000 --env ftu_fake_it="true" ftu
 ```
 
 You will then be able to access the application at http://127.0.0.1:5000/
+
+##### Selenium Setup
+
+To run against a dockerised Chrome you can use a docker network like:
+
+```bash
+docker network create grid
+docker run -d -p 5000:5000 --env ftu_fake_it="true" --network="grid" --name test_server ftu
+docker run -d -p 4444:4444 -p 5900:5900 -v /dev/shm:/dev/shm --network="grid" selenium/standalone-chrome-debug
+```
+This also allows for a VNC sesssion on port 5900 to watch the tests.
