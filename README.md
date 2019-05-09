@@ -13,17 +13,17 @@ If you just want to see the application run use fake data with the ftu_fake_it e
 The simplest setup method is building and running a docker container.  
 
 docker build
-```console
+```bash
 docker build . -t ftu
 ```
 
 docker run with live data
-```console
+```bash
 docker run -p 5000:5000 --env ftu_app_id=<app id> --env ftu_app_key=<app key> ftu  
 ```
 
 docker run with fake data (no transport credentials required)
-```console
+```bash
 docker run -p 5000:5000 --env ftu_fake_it="true" ftu  
 ```
 
