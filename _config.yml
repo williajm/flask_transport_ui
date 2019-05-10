@@ -1,3 +1,2 @@
 theme: jekyll-theme-slate
-plugins:
-  - jekyll-seo-tag
+google_analytics: UA-139955352-1
