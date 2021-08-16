@@ -1,4 +1,4 @@
-# Flask Transport UI
+# Flask Transport UI ![build](https://github.com/williajm/flask_transport_ui/actions/workflows/python-app.yml/badge.svg)
 
 This is a Flask learning project with a focus on testing.   
 The Flask application displays live train schedule information for UK train stations.  
