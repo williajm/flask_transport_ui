@@ -1,55 +1,56 @@
-{% extends 'bootstrap/base.html' %}
-
-{% block title %}Train times{% endblock title %}
-
-{% block navbar %}
-<script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
+{% extends 'bootstrap/base.html' %} {% block title %}Train times{% endblock
+title %} {% block navbar %}
+<script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.3/socket.io.min.js"></script>
 <script src="{{url_for('static',filename='js/train.js')}}"></script>
-<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+<link
+  rel="stylesheet"
+  href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css"
+/>
 <script src="//code.jquery.com/jquery-1.12.4.js"></script>
 <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
 <div class="container-fluid">
-    <nav class="navbar navbar-inverse">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <a class="navbar-brand" href="#">Train Times</a>
-            </div>
-            <ul class="nav navbar-nav">
-                <li class="active"><a href="#">Departures</a></li>
-                <li><a href="#">Arrivals</a></li>
-            </ul>
-            <div class="pull-right">
-                <form class="form-inline" id="search_form">
-                    <label>
-                        <input class="form-control" type="text" id="search_data">
-                        <input type="submit" value="search" id="search_button">
-                    </label>
-                </form>
-            </div>
-        </div>
-    </nav>
+  <nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="#">Train Times</a>
+      </div>
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="#">Departures</a></li>
+        <li><a href="#">Arrivals</a></li>
+      </ul>
+      <div class="pull-right">
+        <form class="form-inline" id="search_form">
+          <label>
+            <input class="form-control" type="text" id="search_data" />
+            <input type="submit" value="search" id="search_button" />
+          </label>
+        </form>
+      </div>
+    </div>
+  </nav>
 </div>
 <script>
-$( "#search_data" ).autocomplete({
-        source:function(request, response) {
-            $.getJSON("{{url_for('autocomplete')}}",{
-                q: request.term,
-            }, function(data) {
-                response(data.matching_results);
-            });
-
+  $("#search_data").autocomplete({
+    source: function (request, response) {
+      $.getJSON(
+        "{{url_for('autocomplete')}}",
+        {
+          q: request.term,
         },
-       select: function(e, ui) {
-            console.log("autocomplete selection", ui.item);
-            document.getElementById('search_data').value = ui.item.value;
-            <!-- trigger event does not invoke the event listener so use dispatch event -->
-            var evt = document.createEvent("Event");
-            evt.initEvent("submit", true, true);
-            document.getElementById('search_form').dispatchEvent(evt);
+        function (data) {
+          response(data.matching_results);
         }
-});
+      );
+    },
+    select: function (e, ui) {
+      console.log("autocomplete selection", ui.item);
+      document.getElementById("search_data").value = ui.item.value;
+      <!-- trigger event does not invoke the event listener so use dispatch event -->
+      var evt = document.createEvent("Event");
+      evt.initEvent("submit", true, true);
+      document.getElementById("search_form").dispatchEvent(evt);
+    },
+  });
 </script>
-{%- endblock %}
-{% block content %}
-{% endblock %}
+{%- endblock %} {% block content %} {% endblock %}
