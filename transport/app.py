@@ -15,64 +15,64 @@ from transport.trie import Trie
 
 log = logging.getLogger(__name__)
 app = Flask(__name__)
-app.config['SECRET_KEY'] = os.getenv('ftu_secret_key', 'secret')
+app.config["SECRET_KEY"] = os.getenv("ftu_secret_key", "secret")
 bootstrap = Bootstrap(app)
 socket_io = SocketIO(app)
 
 
-@app.route('/')
+@app.route("/")
 def get_train_times():
     """
     Render the initial page
     """
-    log.debug(f'request={request}')
-    return render_template('train_times.html')
+    log.debug(f"request={request}")
+    return render_template("train_times.html")
 
 
-@app.route('/autocomplete', methods=['GET'])
+@app.route("/autocomplete", methods=["GET"])
 def autocomplete():
     """
     Searches the trie for autocomplete suggestions.
     """
-    log.debug(f'request={request}')
-    query = request.args.get('q')
+    log.debug(f"request={request}")
+    query = request.args.get("q")
     suggestions = []
     for station in trie.search(query):
         suggestions.append(station.name)
-    log.debug(f'autocomplete results={suggestions}')
+    log.debug(f"autocomplete results={suggestions}")
     return jsonify(matching_results=suggestions)
 
 
-@socket_io.on('connect', namespace='/train')
+@socket_io.on("connect", namespace="/train")
 def train_connect():
     """
     Called when a websocket client connects.
     """
-    log.debug('train_connect() called')
+    log.debug("train_connect() called")
 
 
-@socket_io.on('disconnect', namespace='/train')
+@socket_io.on("disconnect", namespace="/train")
 def train_disconnect():
     """
     Called when a websocket client disconnects.
     """
-    log.debug(f'train_disconnect() called')
+    log.debug(f"train_disconnect() called")
 
 
-@socket_io.on('search_event', namespace='/train')
+@socket_io.on("search_event", namespace="/train")
 def train_search(message):
     """
     Returns the live departure times for a particular station.
     """
-    log.debug(f'received message: {message}')
-    search_result = trie.search(message.get('station'))
-    log.debug(f'search_result={search_result}')
+    log.debug(f"received message: {message}")
+    search_result = trie.search(message.get("station"))
+    log.debug(f"search_result={search_result}")
     if search_result:
         trains = get_train_live(search_result[0].code)
-        log.debug(f'emit: train_result {trains}')
-        emit('train_result', trains, json=True)
+        log.debug(f"emit: train_result {trains}")
+        emit("train_result", trains, json=True)
         log.debug(f'emit: station_name {message.get("station")}')
-        emit('station_name', {'station_name': message.get('station')})
+        emit("station_name", {"station_name": message.get("station")})
 
 
 @socket_io.on_error_default
@@ -88,6 +88,7 @@ class Station:
     """
     Station name to CRS code mapping. Stored as a value in the trie.
     """
+
     name: str
     code: str
 
@@ -98,21 +99,23 @@ def create_trie() -> Trie:
     :return: the trie
     """
     trie = Trie()
-    with resources.open_text('transport', 'station_codes.csv') as stations:
+    with resources.open_text("transport", "station_codes.csv") as stations:
         rows = csv.reader(stations)
         next(rows)  # skip the header
         for row in rows:
             station = Station(name=row[0], code=row[1])
             trie.insert(key=station.name, value=station)
-    log.debug('trie built')
+    log.debug("trie built")
     return trie
 
 
-if __name__ == '__main__':
-    logging.basicConfig(format='%(asctime)s %(module)s %(levelname)s: %(message)s',
-                        level=os.getenv('ftu_log_level', 'DEBUG'))
-    log.info('Starting transport UI')
+if __name__ == "__main__":
+    logging.basicConfig(
+        format="%(asctime)s %(module)s %(levelname)s: %(message)s",
+        level=os.getenv("ftu_log_level", "DEBUG"),
+    )
+    log.info("Starting transport UI")
     trie = create_trie()
-    if os.getenv('ftu_fake_it', False):
+    if os.getenv("ftu_fake_it", False):
         from transport.query import get_train_fake as get_train_live
-    socket_io.run(app, host='0.0.0.0')
+    socket_io.run(app, host="0.0.0.0")
