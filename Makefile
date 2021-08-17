@@ -1,4 +1,10 @@
-all: lint
+all: isort black flake
 
-lint:
-	pylint --disable=W1203,C0103,E1101,W0621,E1135,E1136,E1137,E0202 transport/ tests/*.py
+isort:
+	isort transport tests
+
+black:
+	black transport tests
+
+flake:
+	flake8 transport tests

@@ -37,7 +37,6 @@ class Trie:
         Search the Trie for all nodes with a common prefix.
         :param key_prefix: search parameter
         :return: A list of values which share a common prefix
-        e.g. with a key_prefix for 'Ba' the trie could possibly return ['Ban', 'Ball', 'Barbecue']
         """
         current = self._root
         for char in key_prefix.lower():

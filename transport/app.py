@@ -12,7 +12,11 @@ from flask import Flask, jsonify, render_template, request
 from flask_bootstrap import Bootstrap
 from flask_socketio import SocketIO, emit
 
-from transport.query import get_train_live
+if os.getenv("ftu_fake_it"):
+    from transport.query import get_train_fake as get_train_live
+else:
+    from transport.query import get_train_live
+
 from transport.trie import Trie
 
 log = logging.getLogger(__name__)
@@ -58,7 +62,7 @@ def train_disconnect():
     """
     Called when a websocket client disconnects.
     """
-    log.debug(f"train_disconnect() called")
+    log.debug("train_disconnect() called")
 
 
 @socket_io.on("search_event", namespace="/train")
@@ -118,6 +122,4 @@ if __name__ == "__main__":
     )
     log.info("Starting transport UI")
     trie = create_trie()
-    if os.getenv("ftu_fake_it", False):
-        from transport.query import get_train_fake as get_train_live
     socket_io.run(app, host="0.0.0.0")
