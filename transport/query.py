@@ -1,14 +1,15 @@
 """
 Interfaces with the transport api search methods.
 """
-from dataclasses import dataclass
-from datetime import datetime, timedelta
 import json
 import logging
 import os
+from dataclasses import dataclass
+from datetime import datetime, timedelta
 from typing import List
-from cachetools import cached, TTLCache
+
 import requests
+from cachetools import TTLCache, cached
 
 log = logging.getLogger(__name__)
 session = requests.session()

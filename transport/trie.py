@@ -2,9 +2,10 @@
 trie.py provides trie search tree (AKA a prefix tree).
 """
 from __future__ import annotations
+
 from dataclasses import dataclass, field
 from functools import lru_cache
-from typing import Dict, List, Any
+from typing import Any, Dict, List
 
 
 class Trie:

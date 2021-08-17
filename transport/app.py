@@ -3,13 +3,15 @@ The main module for this flask application.
 Sets up routes and provides AJAX and websocket methods.
 """
 import csv
-from dataclasses import dataclass
-from importlib import resources
 import logging.config
 import os
-from flask import Flask, render_template, request, jsonify
+from dataclasses import dataclass
+from importlib import resources
+
+from flask import Flask, jsonify, render_template, request
 from flask_bootstrap import Bootstrap
 from flask_socketio import SocketIO, emit
+
 from transport.query import get_train_live
 from transport.trie import Trie
 
