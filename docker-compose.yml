@@ -1,0 +1,20 @@
+version: "3.9"
+services:
+  test_server:
+    build: .
+    environment:
+      - ftu_fake_it="true"
+    ports:
+      - "5000:5000"
+    networks:
+      - grid
+  seleniun:
+    image: selenium/standalone-chrome-debug
+    ports:
+      - "4444:4444"
+      - "5900:5900"
+    networks:
+      - grid
+networks:
+  grid:
+    name: grid

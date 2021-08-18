@@ -16,35 +16,29 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: 3.9
-      - name: install dependencies
+      - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements/prod.txt
           pip install -r requirements/dev.txt
-      - name: isort
+      - name: Isort
         run: |
           isort --check-only transport tests
-      - name: black
+      - name: Black
         run: |
           black --check transport tests
-      - name: flake8
+      - name: Flake8
         run: |
           flake8 transport tests
       - name: Unit tests
         run: |
           python -m pytest -vv --cov=transport/ tests/unit
-      - name: Build docker container
+      - name: Start system under test
         run: |
-          docker build . -t local
-      - name: Run docker container
-        run: |
-          docker network create grid
-          docker run -d -p 5000:5000 --env ftu_fake_it="true" --network="grid" --name test_server local
+          docker-compose up -d
       - name: Integration tests
         run: |
           python -m pytest tests/integration
       - name: Selenium tests
         run: |
-          docker run -d -p 4444:4444 -p 5900:5900 -v /dev/shm:/dev/shm --network="grid" selenium/standalone-chrome-debug
-          sleep 30
           behave tests/ui/
