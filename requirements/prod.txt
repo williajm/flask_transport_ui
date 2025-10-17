@@ -6,7 +6,7 @@ click==8.0.1
 dnspython==2.6.1
 dominate==2.6.0
 eventlet==0.40.3
-Flask==2.0.1
+Flask==2.2.5
 Flask-Bootstrap==3.3.7.1
 Flask-SocketIO==5.1.1
 greenlet==1.1.1
