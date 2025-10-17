@@ -30,5 +30,5 @@ six==1.16.0
 socketIO-client==0.7.2
 toml==0.10.2
 tomli==1.2.1
-urllib3==1.26.19
+urllib3==2.5.0
 websocket-client==1.2.1
