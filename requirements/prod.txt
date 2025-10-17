@@ -16,7 +16,7 @@ Jinja2==3.0.1
 MarkupSafe==2.0.1
 python-engineio==4.2.1
 python-socketio==5.14.0
-requests==2.26.0
+requests==2.32.4
 six==1.16.0
 urllib3==1.26.19
 visitor==0.1.3
