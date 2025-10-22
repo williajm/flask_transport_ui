@@ -1,3 +1,5 @@
+import os
+
 from behave import step
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
@@ -10,7 +12,9 @@ WAIT_MAX = 5
 
 @step("the train times page")
 def train_times_page(context):
-    context.driver.get("http://test_server:5000")
+    # In CI, use localhost; in Docker network, use test_server
+    base_url = os.getenv("TEST_SERVER_URL", "http://test_server:5000")
+    context.driver.get(base_url)
 
 
 @step("I enter {keys} into the search box")

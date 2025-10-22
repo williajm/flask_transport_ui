@@ -97,6 +97,7 @@ jobs:
           behave tests/ui/
         env:
           CI: true
+          TEST_SERVER_URL: http://localhost:5000
 
       - name: Stop docker compose
         if: always()
