@@ -1,6 +1,7 @@
 """
 Unit tests for trie.py
 """
+
 import pytest
 
 from transport.app import Station, create_trie

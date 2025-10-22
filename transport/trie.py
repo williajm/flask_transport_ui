@@ -1,6 +1,7 @@
 """
 trie.py provides trie search tree (AKA a prefix tree).
 """
+
 from __future__ import annotations
 
 from dataclasses import dataclass, field
