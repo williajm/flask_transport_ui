@@ -1,8 +1,7 @@
-name: Pre-commit Auto-format
+name: CI Pipeline
 
 on:
   pull_request:
-    branches: [main]
   push:
     branches: [main]
 
@@ -54,3 +53,61 @@ jobs:
         run: |
           echo "Code formatting issues found on main branch. Please run 'pre-commit run --all-files' locally."
           exit 1
+
+  test:
+    runs-on: ubuntu-latest
+    needs: pre-commit
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements/dev.txt
+
+      - name: Run unit tests with coverage
+        run: |
+          python -m pytest -vv --cov=transport/ --cov-report=term --cov-report=xml tests/unit
+
+      - name: Build Docker image
+        run: docker build . -t ftu
+
+      - name: Start test server with docker compose
+        run: docker compose up -d
+
+      - name: Wait for server to be ready
+        run: |
+          echo "Waiting for server to start..."
+          sleep 10
+          curl --retry 10 --retry-delay 2 --retry-connrefused http://localhost:5000/ || (docker compose logs && exit 1)
+
+      - name: Run integration tests
+        run: |
+          python -m pytest -vv tests/integration
+
+      - name: Run Selenium UI tests
+        run: |
+          behave tests/ui/
+        env:
+          CI: true
+          TEST_SERVER_URL: http://localhost:5000
+
+      - name: Stop docker compose
+        if: always()
+        run: docker compose down
+
+      - name: Upload test logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: docker-logs
+          path: |
+            docker-compose.yml
+          retention-days: 5
