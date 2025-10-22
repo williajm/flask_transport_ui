@@ -38,7 +38,7 @@ jobs:
 
       - name: Run unit tests with coverage
         run: |
-          pytest tests/unit/ -vv --cov=transport --cov-report=xml --cov-report=term-missing --cov-fail-under=60
+          PYTHONPATH=. pytest tests/unit/ -vv --cov=transport --cov-report=xml --cov-report=term-missing --cov-fail-under=60
 
       - name: Upload coverage to Codecov
         if: matrix.python-version == '3.12'
@@ -68,16 +68,16 @@ jobs:
           pip install -r requirements/prod.txt
           pip install -r requirements/dev.txt
 
-      - name: Start application with docker-compose
+      - name: Start application with docker compose
         run: |
-          docker-compose up -d
+          docker compose up -d
           sleep 10  # Wait for application to be ready
 
       - name: Run integration tests
         run: |
-          pytest tests/integration/ -vv
+          PYTHONPATH=. pytest tests/integration/ -vv
 
-      - name: Stop docker-compose
+      - name: Stop docker compose
         if: always()
         run: |
-          docker-compose down
+          docker compose down
