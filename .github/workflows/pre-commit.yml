@@ -1,0 +1,56 @@
+name: Pre-commit Auto-format
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  pre-commit:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install pre-commit isort black flake8
+
+      - name: Run pre-commit hooks
+        id: pre-commit
+        run: |
+          pre-commit run --all-files || true
+
+      - name: Check for changes
+        id: git-check
+        run: |
+          git diff --exit-code || echo "changes=true" >> $GITHUB_OUTPUT
+
+      - name: Commit and push changes
+        if: steps.git-check.outputs.changes == 'true' && github.event_name == 'pull_request'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add -A
+          git commit -m "Auto-format code with pre-commit hooks [skip ci]"
+          git push
+
+      - name: Fail if changes were made on main branch
+        if: steps.git-check.outputs.changes == 'true' && github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          echo "Code formatting issues found on main branch. Please run 'pre-commit run --all-files' locally."
+          exit 1

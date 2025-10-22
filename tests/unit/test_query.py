@@ -1,6 +1,7 @@
 """
 Unit tests for query.py
 """
+
 import json
 
 import pytest

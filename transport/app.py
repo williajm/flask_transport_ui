@@ -2,6 +2,7 @@
 The main module for this flask application.
 Sets up routes and provides AJAX and websocket methods.
 """
+
 import csv
 import logging.config
 import os
