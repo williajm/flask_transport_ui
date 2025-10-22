@@ -10,18 +10,18 @@ Feature: Test autocomplete
     Then <suggestions> stations are suggested
 
     Examples:
-    | chars  | suggestions                                              |
-    | glasg  | Glasgow Central,Glasgow Queen Street                     |
-    | Southa | Southall,Southampton Airport Parkway,Southampton Central |
-    | cardi  | Cardiff Bay,Cardiff Central,Cardiff Queen Street         |
+      | chars  | suggestions                                              |
+      | glasg  | Glasgow Central,Glasgow Queen Street                     |
+      | Southa | Southall,Southampton Airport Parkway,Southampton Central |
+      | cardi  | Cardiff Bay,Cardiff Central,Cardiff Queen Street         |
 
 
-   Scenario: Search results by button click
+  Scenario: Search results by button click
 
-     Given the train times page
+    Given the train times page
 
-     When I enter partick into the search box
+    When I enter partick into the search box
 
-     And I click the search button
+    And I click the search button
 
-     Then the partick departures page is displayed
+    Then the partick departures page is displayed
