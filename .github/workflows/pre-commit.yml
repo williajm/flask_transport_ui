@@ -79,14 +79,14 @@ jobs:
       - name: Build Docker image
         run: docker build . -t ftu
 
-      - name: Start test server with docker-compose
-        run: docker-compose up -d
+      - name: Start test server with docker compose
+        run: docker compose up -d
 
       - name: Wait for server to be ready
         run: |
           echo "Waiting for server to start..."
           sleep 10
-          curl --retry 10 --retry-delay 2 --retry-connrefused http://localhost:5000/ || (docker-compose logs && exit 1)
+          curl --retry 10 --retry-delay 2 --retry-connrefused http://localhost:5000/ || (docker compose logs && exit 1)
 
       - name: Run integration tests
         run: |
@@ -103,9 +103,9 @@ jobs:
         env:
           CI: true
 
-      - name: Stop docker-compose
+      - name: Stop docker compose
         if: always()
-        run: docker-compose down
+        run: docker compose down
 
       - name: Upload test logs on failure
         if: failure()
