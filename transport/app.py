@@ -122,4 +122,4 @@ if __name__ == "__main__":
     )
     log.info("Starting transport UI")
     trie = create_trie()
-    socket_io.run(app, host="0.0.0.0")
+    socket_io.run(app, host="0.0.0.0", allow_unsafe_werkzeug=True)

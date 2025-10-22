@@ -1,4 +1,4 @@
-FROM python:3.9.6-slim-buster
+FROM python:3.14.0-slim-trixie
 
 WORKDIR /usr/src/app
 ENV PYTHONPATH=/usr/src/app
