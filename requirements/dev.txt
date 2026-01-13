@@ -14,7 +14,7 @@ cucumber-expressions==18.0.1
 cucumber-tag-expressions==8.1.0
 distlib==0.4.0
 dominate==2.9.1
-filelock==3.20.2
+filelock==3.20.3
 flake8==7.3.0
 flask==3.1.2
 flask-bootstrap==3.3.7.1
